@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>💖 Thiệp Sinh Nhật Lãng Mạn 💖</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #ffb6c1, #ffc0cb, #fff0f5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      overflow: hidden;
+      font-family: "Segoe UI", cursive;
+    }
+
+    h1 {
+      color: #ff1493;
+      font-size: 2.8em;
+      text-shadow: 0 0 10px #fff;
+      text-align: center;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    #message {
+      color: #e91e63;
+      font-size: 1.3em;
+      text-align: center;
+      width: 80%;
+      margin-top: 15px;
+      line-height: 1.6em;
+      white-space: pre-wrap;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    #slideshow {
+      position: relative;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      overflow: hidden;
+      box-shadow: 0 0 30px rgba(255, 182, 193, 0.8);
+      margin-top: 20px;
+      animation: pulse 3s infinite alternate;
+    }
+
+    #slideshow img {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 1.5s;
+    }
+
+    #slideshow img.active {
+      opacity: 1;
+    }
+
+    button {
+      margin-top: 25px;
+      background-color: #ff69b4;
+      border: none;
+      color: white;
+      padding: 12px 25px;
+      font-size: 1.1em;
+      border-radius: 25px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #ffb6c1;
+      transition: transform 0.3s;
+    }
+
+    button:hover {
+      transform: scale(1.1);
+      background-color: #ff85c1;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+      from { transform: scale(1); }
+      to { transform: scale(1.05); }
+    }
+
+    .heart {
+      position: fixed;
+      bottom: 0;
+      font-size: 20px;
+      color: #ff69b4;
+      animation: floatUp 5s linear infinite;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(-100vh) scale(1.8); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <h1>🎂 Chúc mừng sinh nhật Em yêu 💕</h1>
+
+  <div id="slideshow">
+    <img src="https://picsum.photos/300?random=1" class="active">
+    <img src="https://picsum.photos/300?random=2">
+    <img src="https://picsum.photos/300?random=3">
+    <img src="https://picsum.photos/300?random=4">
+  </div>
+
+  <div id="message"></div>
+
+  <button onclick="surprise()">🎉 Bật bất ngờ 🎉</button>
+
+  <audio id="bgMusic" loop autoplay>
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_0e72cfa34f.mp3?filename=love-11206.mp3" type="audio/mp3">
+  </audio>
+
+  <script>
+    // Lời chúc gõ kiểu "typewriter"
+    const msg = `Chúc em có một ngày sinh nhật thật hạnh phúc 💗
+Anh mong nụ cười sẽ luôn ở trên môi em,
+và những điều ngọt ngào nhất trên thế gian này
+sẽ luôn thuộc về em. 💞`;
+
+    let i = 0;
+    const msgEl = document.getElementById("message");
+    function typeWriter() {
+      if (i < msg.length) {
+        msgEl.innerHTML += msg.charAt(i);
+        i++;
+        setTimeout(typeWriter, 50);
+      }
+    }
+    window.onload = typeWriter;
+
+    // Ảnh tự động đổi
+    const slides = document.querySelectorAll("#slideshow img");
+    let index = 0;
+    setInterval(() => {
+      slides[index].classList.remove("active");
+      index = (index + 1) % slides.length;
+      slides[index].classList.add("active");
+    }, 4000);
+
+    // Hiệu ứng tim bay
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.textContent = "💖";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.fontSize = Math.random() * 20 + 15 + "px";
+      heart.style.animationDuration = Math.random() * 3 + 4 + "s";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 5000);
+    }
+    setInterval(createHeart, 300);
+
+    // Nút "Bật bất ngờ"
+    function surprise() {
+      for (let j = 0; j < 30; j++) {
+        setTimeout(createHeart, j * 100);
+      }
+      alert("💘 Anh yêu em nhiều lắm! Chúc em sinh nhật thật ngọt ngào 💘");
+    }
+  </script>
+</body>
+</html>
