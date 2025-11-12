@@ -5,52 +5,46 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>💖 Em cưới anh nhé? 💖</title>
 <style>
-body {
-  margin:0;
-  height:100vh;
-  background: linear-gradient(135deg,#ffb6c1,#fff0f5);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  flex-direction:column;
-  overflow:hidden;
-  font-family:"Segoe UI", cursive;
-  color:#e91e63;
-  text-align:center;
-}
+body {margin:0;height:100vh;background:linear-gradient(135deg,#ffb6c1,#fff0f5);
+display:flex;justify-content:center;align-items:center;flex-direction:column;overflow:hidden;
+font-family:"Segoe UI", cursive;color:#e91e63;text-align:center;}
 h1{font-size:2.5em;text-shadow:0 0 10px #fff;margin:0;}
 p{font-size:1.3em;line-height:1.6em;}
-button{
-  margin:10px;
-  background-color:#ff69b4;
-  border:none;
-  color:white;
-  padding:12px 25px;
-  font-size:1.1em;
-  border-radius:25px;
-  cursor:pointer;
-  box-shadow:0 0 10px #ffb6c1;
-  transition:all 0.3s;
-}
+button{margin:10px;background-color:#ff69b4;border:none;color:white;padding:12px 25px;font-size:1.1em;
+border-radius:25px;cursor:pointer;box-shadow:0 0 10px #ffb6c1;transition:all 0.3s;}
 button:hover{transform:scale(1.1);background-color:#ff85c1;}
 .heart{position:fixed;bottom:0;font-size:20px;color:#ff69b4;animation:floatUp 5s linear infinite;}
 @keyframes floatUp{0%{transform:translateY(0) scale(1);opacity:1;}100%{transform:translateY(-100vh) scale(1.8);opacity:0;}}
-#surpriseScreen{display:none;position:fixed;inset:0;background:linear-gradient(135deg,#ffb6c1,#fff0f5);flex-direction:column;justify-content:center;align-items:center;z-index:9999;color:#e91e63;text-align:center;}
-#milestones{font-size:1.3em;max-width:600px;line-height:1.6em;text-align:center;}
+#surpriseScreen,#wishScreen{display:none;position:fixed;inset:0;background:linear-gradient(135deg,#ffb6c1,#fff0f5);
+flex-direction:column;justify-content:flex-start;align-items:center;z-index:9999;color:#e91e63;text-align:center;overflow-y:hidden;}
+#timeline{position:relative;width:4px;height:80%;background:rgba(255,255,255,0.2);margin-top:20px;}
+.milestone{position:absolute;left:50%;transform:translateX(-50%);opacity:0;text-align:center;}
+.milestone img{width:150px;height:150px;object-fit:cover;border-radius:10px;margin-top:10px;}
+#startScreen img{width:250px;height:250px;border-radius:20px;margin-bottom:15px;object-fit:cover;}
+.confetti{position:fixed;width:10px;height:10px;pointer-events:none;}
+#wishScreen h1{margin-top:50px;font-size:2em;}
+#wishScreen p{margin:20px;font-size:1.3em;line-height:1.6em;}
 </style>
 </head>
 <body>
 
-<h1>Em cưới anh nhé? 💖</h1>
-<div>
-  <button id="yesBtn">Đồng ý 💍</button>
-  <button id="noBtn">Không 😅</button>
+<div id="startScreen">
+  <img src="https://picsum.photos/300/300?random=1" alt="Ảnh lãng mạn">
+  <h1>Em cưới anh nhé? 💖</h1>
+  <div>
+    <button id="yesBtn">Đồng ý 💍</button>
+    <button id="noBtn">Không 😅</button>
+  </div>
 </div>
 
-<!-- Màn hình kỷ niệm -->
 <div id="surpriseScreen">
   <h1>💖 Kỷ niệm của chúng ta 💖</h1>
-  <div id="milestones"></div>
+  <div id="timeline"></div>
+</div>
+
+<div id="wishScreen">
+  <h1>🎉 Lời chúc của anh dành cho em 🎉</h1>
+  <p>Chúc em sinh nhật thật hạnh phúc, luôn cười rạng rỡ, và những khoảnh khắc ngọt ngào nhất luôn bên chúng ta! 💞</p>
 </div>
 
 <audio id="bgMusic" loop autoplay>
@@ -59,79 +53,75 @@ button:hover{transform:scale(1.1);background-color:#ff85c1;}
 
 <script>
 // Tim bay
-function createHeart(){
-  const heart=document.createElement("div");
-  heart.className="heart";
-  heart.textContent="💖";
-  heart.style.left=Math.random()*100+"vw";
-  heart.style.fontSize=Math.random()*20+15+"px";
-  heart.style.animationDuration=Math.random()*3+4+"s";
-  document.body.appendChild(heart);
-  setTimeout(()=>heart.remove(),5000);
-}
+function createHeart(){const h=document.createElement("div");h.className="heart";h.textContent="💖";
+h.style.left=Math.random()*100+"vw";h.style.fontSize=Math.random()*20+15+"px";
+h.style.animationDuration=Math.random()*3+4+"s";document.body.appendChild(h);
+setTimeout(()=>h.remove(),5000);}
 setInterval(createHeart,300);
 
-// Nút "Đồng ý" chuyển sang màn hình kỷ niệm
-document.getElementById('yesBtn').onclick = () => {
-  document.querySelector('h1').style.display='none';
-  document.getElementById('yesBtn').style.display='none';
-  document.getElementById('noBtn').style.display='none';
-  startSurpriseScreen();
-}
+// Nút Đồng ý
+document.getElementById('yesBtn').onclick=()=>{document.getElementById('startScreen').style.display='none';startSurpriseScreen();}
 
-// Nút "Không" nhảy lung tung
-const noBtn = document.getElementById('noBtn');
-noBtn.onmouseover = () => {
-  const x = Math.random()*(window.innerWidth - noBtn.offsetWidth);
-  const y = Math.random()*(window.innerHeight - noBtn.offsetHeight);
-  noBtn.style.position = 'absolute';
-  noBtn.style.left = x+'px';
-  noBtn.style.top = y+'px';
-}
+// Nút Không nhảy lung tung
+const noBtn=document.getElementById('noBtn');
+noBtn.onclick=noBtn.onmouseover=()=>{const x=Math.random()*(window.innerWidth-noBtn.offsetWidth);
+const y=Math.random()*(window.innerHeight-noBtn.offsetHeight);noBtn.style.position='absolute';
+noBtn.style.left=x+'px';noBtn.style.top=y+'px';}
 
-// Hàm bắt đầu màn hình kỷ niệm
+// Màn hình kỷ niệm
 function startSurpriseScreen(){
-  const screen=document.getElementById('surpriseScreen');
-  screen.style.display='flex';
+const screen=document.getElementById('surpriseScreen');screen.style.display='flex';
+for(let j=0;j<30;j++){setTimeout(createHeart,j*100);}
+const milestones=[
+{text:"Ngày chúng ta gặp lần đầu: 14/02/2022", img:"https://picsum.photos/150/150?random=2"},
+{text:"Ngày chính thức yêu nhau: 01/03/2022", img:"https://picsum.photos/150/150?random=3"},
+{text:"Chuyến du lịch đáng nhớ: 12/08/2022", img:"https://picsum.photos/150/150?random=4"},
+{text:"Sinh nhật đầu tiên bên nhau: 15/11/2022", img:"https://picsum.photos/150/150?random=5"},
+{text:"Ngày hôm nay: 12/11/2025", img:"https://picsum.photos/150/150?random=6"}
+];
+const timeline=document.getElementById('timeline');const totalHeight=timeline.offsetHeight;
 
-  // Tim bay
-  for(let j=0;j<30;j++){setTimeout(createHeart,j*100);}
+// Tạo mốc
+milestones.forEach((ms,index)=>{
+  const el=document.createElement('div');el.className='milestone';
+  el.style.top=(index/(milestones.length-1))*totalHeight+'px';
+  el.innerHTML=`<p></p><img src="${ms.img}" />`;timeline.appendChild(el);
+});
 
-  // Mốc kỷ niệm
-  const milestones=[
-    "💖 Ngày chúng ta gặp lần đầu: 14/02/2022",
-    "💖 Ngày chính thức yêu nhau: 01/03/2022",
-    "💖 Chuyến du lịch đáng nhớ: 12/08/2022",
-    "💖 Sinh nhật đầu tiên bên nhau: 15/11/2022",
-    "💖 Ngày hôm nay: 12/11/2025"
-  ];
+// Chạy sợi chỉ
+let pointer=0;const interval=setInterval(()=>{
+pointer+=2;timeline.style.background=`linear-gradient(to bottom, white ${pointer}px, rgba(255,255,255,0.2) ${pointer}px)`;
+const milestoneEls=document.querySelectorAll('.milestone');
+milestoneEls.forEach((el,index)=>{
+const top=parseFloat(el.style.top);const p=el.querySelector('p');const text=milestones[index].text;
+if(pointer>=top && p.textContent.length===0){
+  // typewriter
+  let i=0;function step(){if(i<text.length){p.textContent+=text.charAt(i);i++;setTimeout(step,50);}
+  else if(index===milestones.length-1)showFinalWish();}step();el.style.opacity=1;
+}
+});
+if(pointer>totalHeight) clearInterval(interval);
+},50);
+}
 
-  const container=document.getElementById('milestones');
-  let idx=0;
-
-  function typeWriter(text, callback){
-    const p=document.createElement('p');
-    container.appendChild(p);
-    let i=0;
-    function step(){
-      if(i<text.length){
-        p.textContent+=text.charAt(i);
-        i++;
-        setTimeout(step,50);
-      } else if(callback) {
-        callback();
-      }
-    }
-    step();
+// Confetti
+function showFinalWish(){
+  for(let i=0;i<150;i++){
+    const c=document.createElement('div');c.className='confetti';
+    c.style.background=['#ff0','#f0f','#0ff','#fff','#f90'][Math.floor(Math.random()*5)];
+    c.style.left=Math.random()*window.innerWidth+'px';
+    c.style.top='-10px';
+    c.style.width='10px';c.style.height='10px';
+    c.style.position='fixed';
+    document.body.appendChild(c);
+    let speed=Math.random()*5+2;
+    const fall=setInterval(()=>{
+      c.style.top=(parseFloat(c.style.top)+speed)+'px';
+      if(parseFloat(c.style.top)>window.innerHeight){clearInterval(fall);c.remove();}
+    },30);
   }
-
-  function showNext(){
-    if(idx<milestones.length){
-      typeWriter(milestones[idx],()=>{idx++;setTimeout(showNext,500);});
-    }
-  }
-
-  showNext();
+  setTimeout(()=>{document.getElementById('surpriseScreen').style.display='none';
+  document.getElementById('wishScreen').style.display='flex';},1500);
 }
 </script>
 
