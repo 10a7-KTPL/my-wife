@@ -133,7 +133,15 @@
 <body>
   <!-- SCREEN 1 -->
   <div id="screen1" class="screen">
-    <img id="mainImage" src="your-image.jpg" alt="ảnh của bạn" />
+    <div id=\"slideshow1\">
+      <img src=\"img1.jpg\" />
+      <img src=\"img2.jpg\" />
+      <img src=\"img3.jpg\" />
+      <img src=\"img4.jpg\" />
+      <img src=\"img5.jpg\" />
+      <img src=\"img6.jpg\" />
+      <img src=\"img7.jpg\" />
+    </div>
     <h1>Em cưới anh nhé? 💖</h1>
     <button id="yesBtn" class="btn">Đồng ý 💗</button>
     <button id="noBtn" class="btn">Không 😭</button>
@@ -148,7 +156,7 @@
       <img src="img4.jpg" />
     </div>
 
-    <textarea id="wishBox" placeholder="Viết lời chúc của bạn ở đây..."></textarea>
+    <div id=\"wishText\">Lời chúc của bạn sẽ được viết trực tiếp trong code ❤️</div>
   </div>
 
   <script>
@@ -175,7 +183,29 @@
     });
 
     /* Floating hearts on screen 2 */
+    function // Floating hearts used for both screens
     function spawnHeart() {
+      const heart = document.createElement(\"div\");
+      heart.className = \"heart\";
+      heart.innerHTML = \"❤\";
+      heart.style.left = Math.random() * window.innerWidth + \"px\";
+      heart.style.bottom = \"0px\";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 4000);
+    }
+    setInterval(spawnHeart, 500);
+
+    /* Slideshow for Screen 1 */
+    const slides1 = document.querySelectorAll('#slideshow1 img');
+    let idx1 = 0;
+    function showNext1() {
+      slides1.forEach((img, i) => img.style.opacity = i === idx1 ? 1 : 0);
+      idx1 = (idx1 + 1) % slides1.length;
+    }
+    showNext1();
+    setInterval(showNext1, 3000);
+
+    /* Floating hearts on screen 2 */() {
       const heart = document.createElement("div");
       heart.className = "heart";
       heart.innerHTML = "❤";
